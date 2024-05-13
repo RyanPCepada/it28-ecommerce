@@ -1,6 +1,6 @@
 <?php
 // Include config file
-require_once $_SERVER['DOCUMENT_ROOT'] . "/it28-ecommerce/db/config.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/it28-ecommerce/it28-admin/db/config.php";
 
 // Define variables and initialize with empty values
 $title = $description = $price = $rrp = $quantity = $img = "";
@@ -77,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Attempt to execute the prepared statement
             if ($stmt->execute()) {
                 // Records created successfully. Redirect to landing page
-                header("location: ../index.php");
+                header("location: ../products.php");
                 exit();
             } else {
                 echo "Oops! Something went wrong. Please try again later.";
