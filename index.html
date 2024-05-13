@@ -61,6 +61,10 @@
       </form>
     </div>
 </nav>
+
+    <!-- Checkout Button -->
+    <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Checkout</button>
+
 <body>
 
     <div id="productsDisplay" class="card-grid"></div>
@@ -139,13 +143,10 @@
 
 
 
-    <!-- Checkout Button -->
-    <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Checkout</button>
-
     <script>
         // Function to redirect to signin.php when checkout button is clicked
         function checkout() {
-            window.location.href = 'it28-admin/public/user/signin.php';
+            window.location.href = './it28-admin/index.php';
         }
     </script>
 

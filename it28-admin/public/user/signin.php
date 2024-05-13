@@ -14,7 +14,44 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 // Define variables and initialize with empty values
 $username = $password = "";
 $username_err = $password_err = $login_err = "";
+
+
+
+
+
+
+
+
+
+
+/* Database credentials. Assuming you are running MySQL
+server with default setting (user 'root' with no password) */
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'root');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'it28-ecommerce');
  
+/* Attempt to connect to MySQL database */
+try{
+    $pdo = new PDO("mysql:host=" . DB_SERVER . ";dbname=" . DB_NAME, DB_USERNAME, DB_PASSWORD);
+    // Set the PDO error mode to exception
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e){
+    die("ERROR: Could not connect. " . $e->getMessage());
+}
+ 
+
+
+
+
+
+
+
+
+
+
+
+
 // Processing form data when form is submitted
 if($_SERVER["REQUEST_METHOD"] == "POST"){
  
@@ -122,7 +159,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Login">
             </div>
-            <p>Don't have an account? <a href="public/register.php">Sign up now</a>.</p>
+            <p>Don't have an account? <a href="./register.php">Sign up now</a>.</p>
         </form>
     </div>
 </body>
