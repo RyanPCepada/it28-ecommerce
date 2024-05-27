@@ -51,9 +51,9 @@
         <li class="nav-item active">
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="#">Purchases</a>
+        </li> -->
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -65,7 +65,9 @@
 
     <div id="productsDisplay" class="card-grid"></div>
     <!-- Cart Display Area -->
-    <div id="cartContainer"></div>
+    <div id="cartContainer">
+        <h1>Purchases</h1>
+    </div>
 
     <script>
         fetch('./products/products-api.php')
@@ -74,8 +76,6 @@
                 const booksContainer = document.getElementById('productsDisplay');
                 data.forEach(product => {
                     const cardHTML = `
-                    
-
                     <div class="card" style="width: 18rem;">
                         <img class="card-img-top" src="${product.img}">
                             <div class="card-body">
@@ -88,53 +88,41 @@
                             </button>
                             </div>
                     </div>
-
                     `;
                     booksContainer.innerHTML += cardHTML;
                 });
             })
             .catch(error => console.error('Error:', error));
 
+        // Initialize cart object
+        let cart = {};
+
         // Function to add a product to the cart
         function addToCart(productId) {
-            // Here, you can implement your logic to add the product with the given ID to the cart
-            console.log(`Product with ID ${productId} added to cart`);
-            // For example, you can send an AJAX request to your server to update the cart
+            // Add the product to the cart
+            if (cart[productId]) {
+                cart[productId]++;
+            } else {
+                cart[productId] = 1;
+            }
+            // Display the updated cart
+            displayCart();
         }
 
         // Function to display the cart with the items added and deduct the values from the quantity data field
         function displayCart() {
-            // Here, you can implement the logic to display the cart with the items added and update the quantity data field
-        }
-
-        // Initialize cart object
-    let cart = {};
-
-    // Function to add a product to the cart
-    function addToCart(productId) {
-        // Add the product to the cart
-        if (cart[productId]) {
-            cart[productId]++;
-        } else {
-            cart[productId] = 1;
-        }
-        // Display the updated cart
-        displayCart();
-    }
-
-    // Function to display the cart with the items added and deduct the values from the quantity data field
-    function displayCart() {
-        const cartContainer = document.getElementById('cartContainer');
-            let cartHTML = '<h3>Cart</h3>';
+            const cartContainer = document.getElementById('cartContainer');
+            let cartHTML = '';
             // Iterate over the cart items and display them
             for (const [productId, quantity] of Object.entries(cart)) {
                 cartHTML += `<p>Product ID: ${productId}, Quantity: ${quantity}</p>`;
                 // Here, you can update the quantity data field for the corresponding product
             }
             // Update the cart display
-            cartContainer.innerHTML = cartHTML;
-    }
+            cartContainer.innerHTML = '<h1>Purchases</h1>' + cartHTML;
+        }
 
     </script>
+
 </body>
 </html>
