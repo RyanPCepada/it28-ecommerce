@@ -16,17 +16,17 @@
             width: 80%; /* Set width to 80% */
         }
 
-
         /* Style for individual cards */
         .card {
             width: 100%; /* Ensure cards take full width of their container */
         }
 
-        .card-img-top{
+        .card-img-top {
             width: 100%; /* Ensure the image fills its container */
             height: auto; /* Maintain aspect ratio */
             object-fit: cover; /* Ensure the image covers the entire container */
         }
+
         /* Style for the cart */
         #cartContainer {
             position: fixed;
@@ -51,9 +51,6 @@
         <li class="nav-item active">
           <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link" href="#">Purchases</a>
-        </li> -->
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -80,8 +77,8 @@
                         <img class="card-img-top" src="${product.img}">
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5><br>Price: ₱${product.rrp}<br>
-                                <p class="card-text">${product.description}.</p>
-                                <p class="card-text"<br>Quantity: ${product.quantity}</p>
+                                <p class="card-text">${product.description}</p>
+                                <p class="card-text"><br>Quantity: ${product.quantity}</p>
                                  <button class="btn btn-success" onclick="addToCart(${product.id})">
                                     <i class="fas fa-cart-plus"></i> <!-- Add to Cart icon -->
                                 Add to Cart
@@ -93,36 +90,69 @@
                 });
             })
             .catch(error => console.error('Error:', error));
-
+    
         // Initialize cart object
         let cart = {};
-
+    
         // Function to add a product to the cart
         function addToCart(productId) {
+            // Get the product details from the DOM
+            const productCard = document.querySelector(`[onclick="addToCart(${productId})"]`).closest('.card');
+            const title = productCard.querySelector('.card-title').textContent;
+            const description = productCard.querySelector('.card-text').textContent;
+            const priceText = productCard.querySelector('.card-body').innerHTML.match(/Price: ₱(\d+\.?\d*)/);
+            const price = priceText ? parseFloat(priceText[1]) : 0;
+            const quantity = 1; // Default to 1 for simplicity
+            const img = productCard.querySelector('.card-img-top').src;
+    
             // Add the product to the cart
             if (cart[productId]) {
-                cart[productId]++;
+                cart[productId].quantity++;
             } else {
-                cart[productId] = 1;
+                cart[productId] = { title, price, quantity: 1 };
             }
+    
             // Display the updated cart
             displayCart();
+    
+            // Send the product details to the server to store in the database
+            fetch('add-to-cart.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `id=${productId}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&price=${price}&quantity=${quantity}&img=${encodeURIComponent(img)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    console.log("Product added to purchases");
+                } else {
+                    console.error("Error adding product to purchases:", data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
-
+    
         // Function to display the cart with the items added and deduct the values from the quantity data field
         function displayCart() {
             const cartContainer = document.getElementById('cartContainer');
-            let cartHTML = '';
+            let cartHTML = '<h1>Purchases</h1>';
             // Iterate over the cart items and display them
-            for (const [productId, quantity] of Object.entries(cart)) {
-                cartHTML += `<p>Product ID: ${productId}, Quantity: ${quantity}</p>`;
-                // Here, you can update the quantity data field for the corresponding product
+            for (const [productId, productDetails] of Object.entries(cart)) {
+                cartHTML += `
+                    <p>
+                        Name: ${productDetails.title}<br>
+                        Price: ₱${productDetails.price.toFixed(2)}<br>
+                        Quantity: ${productDetails.quantity}
+                    </p>
+                `;
             }
             // Update the cart display
-            cartContainer.innerHTML = '<h1>Purchases</h1>' + cartHTML;
+            cartContainer.innerHTML = cartHTML;
         }
-
     </script>
-
+    
+    
 </body>
 </html>
