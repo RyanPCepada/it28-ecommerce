@@ -1,10 +1,10 @@
 <?php
 // checkout.php
 // Database connection
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "it28-ecommerce";
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "it28-ecommerce";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -17,11 +17,11 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 // Insert each item in the cart into the purchases table
 foreach ($data as $productId => $productDetails) {
-    $title = $productDetails['title'];
-    $description = $productDetails['description'];
+    $title = $conn->real_escape_string($productDetails['title']);
+    $description = $conn->real_escape_string($productDetails['description']);
     $price = $productDetails['price'];
     $quantity = $productDetails['quantity'];
-    $img = $productDetails['img'];
+    $img = $conn->real_escape_string($productDetails['img']);
     $date_added = date('Y-m-d H:i:s'); // Current timestamp
 
     $sql = "INSERT INTO purchases (title, description, price, quantity, img, date_added)

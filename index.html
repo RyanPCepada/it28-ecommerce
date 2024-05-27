@@ -45,7 +45,7 @@
         #purchased {
             width: 20%;
             position: fixed;
-            top: 4em;
+            top: 10em;
             right: 0px;
             background-color: #fff;
             border: 1px solid #ddd;
@@ -56,6 +56,13 @@
             overflow-y: auto; /* Enable vertical scrollbar */
             max-height: calc(100vh - 70px); /* Limit max height to viewport height minus header and footer */
         }
+
+        /* CSS for the product images in the purchasing section */
+        .product-image {
+            width: 1in; /* Set width to 1 inch */
+            height: 1in; /* Set height to 1 inch */
+        }
+
     </style>
 </head>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -103,7 +110,7 @@
                                 <p class="card-text">Price: ₱${product.rrp}</p>
                                 <p class="card-text">${product.description}</p>
                                 <p class="card-text">Quantity: ${product.quantity}</p>
-                                <button class="btn btn-success" onclick="addToCart(${product.id})">
+                                <button class="btn btn-success" onclick="addToCart(${product.id},'${product.description}','${product.img}')">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
                             </div>
@@ -118,44 +125,26 @@
         let cart = {};
 
         // Function to add a product to the cart
-        function addToCart(productId) {
+        function addToCart(productId, description, img) {
             // Get the product details from the DOM
-            const productCard = document.querySelector(`[onclick="addToCart(${productId})"]`).closest('.card');
+            const productCard = document.querySelector(`[onclick="addToCart(${productId},'${description}','${img}')"]`).closest('.card');
             const title = productCard.querySelector('.card-title').textContent;
-            const description = productCard.querySelector('.card-text').textContent;
             const priceText = productCard.querySelector('.card-body').innerHTML.match(/Price: ₱(\d+\.?\d*)/);
             const price = priceText ? parseFloat(priceText[1]) : 0;
             const quantity = 1; // Default to 1 for simplicity
-            const img = productCard.querySelector('.card-img-top').src;
 
             // Add the product to the cart
             if (cart[productId]) {
                 cart[productId].quantity++;
             } else {
-                cart[productId] = { title, price, quantity: 1 };
+                cart[productId] = { title, price, quantity, description, img };
             }
 
             // Display the updated cart
             displayCart();
+        }
 
-            // Send the product details to the server to store in the database
-            fetch('add-to-cart.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                body: `id=${productId}&title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&price=${price}&quantity=${quantity}&img=${encodeURIComponent(img)}`
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success") {
-                    console.log("Product added to purchases");
-                } else {
-                    console.error("Error adding product to purchases:", data.message);
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }        // Function to display the purchased items
+        // Function to display the purchased items
         function displayPurchasedItems() {
             fetch('display-purchases.php')
                 .then(response => response.text())
@@ -174,13 +163,18 @@
             const purchases = document.getElementById('purchases');
             let cartHTML = '<h1>Purchasing</h1>';
             // Iterate over the cart items and display them
-            for (const [productId, productDetails] of Object.entries(cart)) {
+            for (const
+            [productId, productDetails] of Object.entries(cart)) {
                 cartHTML += `
-                    <p>
-                        Name: ${productDetails.title}<br>
-                        Price: ₱${productDetails.price.toFixed(2)}<br>
-                        Quantity: ${productDetails.quantity}
-                    </p>
+                    <div class="product">
+                        <img src="${productDetails.img}" alt="${productDetails.title}" class="product-image">
+                        <div class="product-details">
+                            <p class="product-title">${productDetails.title}</p>
+                            <p class="product-description">${productDetails.description}</p>
+                            <p class="product-price">Price: ₱${productDetails.price.toFixed(2)}</p>
+                            <p class="product-quantity">Quantity: ${productDetails.quantity}</p>
+                        </div>
+                    </div>
                 `;
             }
             // Update the cart display
@@ -208,6 +202,7 @@
                     // Clear the cart if the data is successfully stored
                     cart = {};
                     displayCart(); // Update the cart display
+                    alert("Purchased!"); // Display popup message
                     console.log("Checkout successful");
                 } else {
                     console.error("Error during checkout:", data.message);
