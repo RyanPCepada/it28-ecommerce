@@ -54,10 +54,10 @@
             z-index: 999;
             margin-top: 200px; /* Adjust as needed */
             overflow-y: auto; /* Enable vertical scrollbar */
-            max-height: calc(100vh - 70px); /* Limit max height to viewport height minus header and footer */
+            height: 350px; /* Limit max height to viewport height minus header and footer */
         }
 
-        /* CSS for the product images in the purchasing section */
+        /* CSS for the product images in the Cart section */
         .product-image {
             width: 1in; /* Set width to 1 inch */
             height: 1in; /* Set height to 1 inch */
@@ -88,7 +88,7 @@
     <div id="productsDisplay" class="card-grid"></div>
     <!-- Cart Display Area -->
     <div id="purchases">
-        <h1>Purchasing</h1>
+        <h1>Cart</h1>
     </div>
 
     <div id="purchased">
@@ -103,13 +103,12 @@
                 const productsContainer = document.getElementById('productsDisplay');
                 data.forEach(product => {
                     const cardHTML = `
-                        <div class="card" style="width: 18rem;">
+                        <div class="card m-2" style="width: 18rem;">
                             <img class="card-img-top" src="${product.img}">
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5>
                                 <p class="card-text">Price: ₱${product.rrp}</p>
                                 <p class="card-text">${product.description}</p>
-                                <p class="card-text">Quantity: ${product.quantity}</p>
                                 <button class="btn btn-success" onclick="addToCart(${product.id},'${product.description}','${product.img}')">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
@@ -120,10 +119,10 @@
                 });
             })
             .catch(error => console.error('Error:', error));
-
+    
         // Initialize cart object
         let cart = {};
-
+    
         // Function to add a product to the cart
         function addToCart(productId, description, img) {
             // Get the product details from the DOM
@@ -132,44 +131,29 @@
             const priceText = productCard.querySelector('.card-body').innerHTML.match(/Price: ₱(\d+\.?\d*)/);
             const price = priceText ? parseFloat(priceText[1]) : 0;
             const quantity = 1; // Default to 1 for simplicity
-
+    
             // Add the product to the cart
             if (cart[productId]) {
                 cart[productId].quantity++;
             } else {
                 cart[productId] = { title, price, quantity, description, img };
             }
-
+    
             // Display the updated cart
             displayCart();
         }
-
-        // Function to display the purchased items
-        function displayPurchasedItems() {
-            fetch('display-purchases.php')
-                .then(response => response.text())
-                .then(purchasedItemsHTML => {
-                    const purchasedItemsContainer = document.getElementById('purchasedItems');
-                    purchasedItemsContainer.innerHTML = purchasedItemsHTML;
-                })
-                .catch(error => console.error('Error displaying purchased items:', error));
-        }
-
-        // Call the function to display purchased items
-        displayPurchasedItems();
-
+    
         // Function to display the cart with the items added and deduct the values from the quantity data field
         function displayCart() {
             const purchases = document.getElementById('purchases');
-            let cartHTML = '<h1>Purchasing</h1>';
+            let cartHTML = '<h1>Cart</h1>';
             // Iterate over the cart items and display them
-            for (const
-            [productId, productDetails] of Object.entries(cart)) {
+            for (const [productId, productDetails] of Object.entries(cart)) {
                 cartHTML += `
-                    <div class="product">
-                        <img src="${productDetails.img}" alt="${productDetails.title}" class="product-image">
+                    <div class="product mb-3">
+                        <img src="${productDetails.img}" alt="${productDetails.title}" class="product-image" style="width: 100px; height: 100px;">
                         <div class="product-details">
-                            <p class="product-title">${productDetails.title}</p>
+                            <p class="product-title"><strong>${productDetails.title}</strong></p>
                             <p class="product-description">${productDetails.description}</p>
                             <p class="product-price">Price: ₱${productDetails.price.toFixed(2)}</p>
                             <p class="product-quantity">Quantity: ${productDetails.quantity}</p>
@@ -180,12 +164,21 @@
             // Update the cart display
             purchases.innerHTML = cartHTML;
         }
-    </script>
-
-    <!-- Checkout Button -->
-    <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Checkout</button>
-
-    <script>
+    
+        // Function to display the purchased items
+        function displayPurchasedItems() {
+            fetch('display-purchases.php')
+                .then(response => response.text())
+                .then(purchasedItemsHTML => {
+                    const purchasedItemsContainer = document.getElementById('purchasedItems');
+                    purchasedItemsContainer.innerHTML = purchasedItemsHTML;
+                })
+                .catch(error => console.error('Error displaying purchased items:', error));
+        }
+    
+        // Call the function to display purchased items
+        displayPurchasedItems();
+    
         // Function to handle checkout
         function checkout() {
             // Send a POST request to the server with the cart data
@@ -211,6 +204,5 @@
             .catch(error => console.error('Error:', error));
         }
     </script>
-
 </body>
 </html>
