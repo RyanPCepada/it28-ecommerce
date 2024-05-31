@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "it28-ecommerce";
+$dbname = "u593341949_db_cepada";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 

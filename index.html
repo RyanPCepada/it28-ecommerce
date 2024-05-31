@@ -19,6 +19,12 @@
         /* Style for individual cards */
         .card {
             width: 100%; /* Ensure cards take full width of their container */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth transitions */
+        }
+
+        .card:hover {
+            transform: translateY(-10px); /* Move the card up when hovered */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow effect */
         }
 
         .card-img-top {
@@ -29,6 +35,7 @@
 
         /* Style for the cart */
         #purchases {
+            position: relative;
             width: 20%;
             position: fixed;
             top: 4em;
@@ -42,33 +49,34 @@
             max-height: calc(100vh - 70px); /* Limit max height to viewport height minus header and footer */
         }
 
-        #purchased {
-            width: 20%;
-            position: fixed;
-            top: 10em;
-            right: 0px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 999;
-            margin-top: 200px; /* Adjust as needed */
-            overflow-y: auto; /* Enable vertical scrollbar */
-            height: 350px; /* Limit max height to viewport height minus header and footer */
-        }
-
         /* CSS for the product images in the Cart section */
         .product-image {
             width: 1in; /* Set width to 1 inch */
             height: 1in; /* Set height to 1 inch */
         }
 
+        /* Full width for purchased items section */
+        #purchased {
+            width: 100%; /* Full width */
+            position: relative; /* Not fixed */
+            top: 0; /* Reset top */
+            right: 0; /* Reset right */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            margin-top: 20px; /* Adjust as needed */
+            overflow-y: auto; /* Enable vertical scrollbar */
+            /*max-height: 400px;  Limit max height */
+        }
+
     </style>
 </head>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">
-        <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
-        Bootstrap
+        <img src="https://www.pngall.com/wp-content/uploads/2017/05/Copyright-Symbol-R-Free-Download-PNG.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        RyanNikeez
     </a>
   
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -91,11 +99,41 @@
         <h1>Cart</h1>
     </div>
 
+    <!-- Checkout Button -->
+    <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Checkout</button>
+
+    <!-- Purchased Items Section -->
     <div id="purchased">
         <h1>Purchased</h1>
         <div id="purchasedItems"></div>
     </div>
 
+    <!-- Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Order Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Your order has been placed successfully! Thank you for your purchase.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="redirectToOrderSummary()">View Order Summary</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add these scripts at the end of the body tag for better performance -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
     <script>
         fetch('./products/products-api.php')
             .then(response => response.json())
@@ -103,12 +141,12 @@
                 const productsContainer = document.getElementById('productsDisplay');
                 data.forEach(product => {
                     const cardHTML = `
-                        <div class="card m-2" style="width: 18rem;">
+                        <div class="card m-2" style="width: 20rem;">
                             <img class="card-img-top" src="${product.img}">
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5>
-                                <p class="card-text">Price: ₱${product.rrp}</p>
                                 <p class="card-text">${product.description}</p>
+                                <p class="card-text">Price: ₱${product.rrp}</p>
                                 <button class="btn btn-success" onclick="addToCart(${product.id},'${product.description}','${product.img}')">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
@@ -155,7 +193,8 @@
                         <div class="product-details">
                             <p class="product-title"><strong>${productDetails.title}</strong></p>
                             <p class="product-description">${productDetails.description}</p>
-                            <p class="product-price">Price: ₱${productDetails.price.toFixed(2)}</p>
+                            <p class="product-price
+                            >₱${productDetails.price.toFixed(2)}</p>
                             <p class="product-quantity">Quantity: ${productDetails.quantity}</p>
                         </div>
                     </div>
@@ -195,13 +234,22 @@
                     // Clear the cart if the data is successfully stored
                     cart = {};
                     displayCart(); // Update the cart display
-                    alert("Purchased!"); // Display popup message
-                    console.log("Checkout successful");
+  
+                    // Display the confirmation modal
+                    $('#confirmationModal').modal('show');
+  
+                    // Optionally, send an order confirmation email or handle payment here
+  
                 } else {
                     console.error("Error during checkout:", data.message);
                 }
             })
             .catch(error => console.error('Error:', error));
+        }
+  
+        // Function to redirect to the order summary page
+        function redirectToOrderSummary() {
+            window.location.href = 'order-summary.php'; // Replace with the actual URL of your order summary page
         }
     </script>
 </body>
