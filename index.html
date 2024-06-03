@@ -18,11 +18,13 @@
 
         /* Style for individual cards */
         .card {
-            width: 100%; /* Ensure cards take full width of their container */
+            width: 100% !important; /* Ensure cards take full width of their container */
             transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth transitions */
+            background-color: #d5ffd7;
         }
 
         .card:hover {
+            background-color: rgb(185, 243, 186);
             transform: translateY(-10px); /* Move the card up when hovered */
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow effect */
         }
@@ -82,9 +84,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="display-purchases.php">Purchases<span class="sr-only"></span></a>
         </li>
       </ul>
+
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -97,15 +103,6 @@
     <!-- Cart Display Area -->
     <div id="purchases">
         <h1>Cart</h1>
-    </div>
-
-    <!-- Checkout Button -->
-    <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Checkout</button>
-
-    <!-- Purchased Items Section -->
-    <div id="purchased">
-        <h1>Purchased</h1>
-        <div id="purchasedItems"></div>
     </div>
 
     <!-- Confirmation Modal -->
@@ -193,31 +190,20 @@
                         <div class="product-details">
                             <p class="product-title"><strong>${productDetails.title}</strong></p>
                             <p class="product-description">${productDetails.description}</p>
-                            <p class="product-price
-                            >₱${productDetails.price.toFixed(2)}</p>
+                            <p class="product-price">₱${productDetails.price.toFixed(2)}</p>
                             <p class="product-quantity">Quantity: ${productDetails.quantity}</p>
                         </div>
                     </div>
                 `;
             }
+            // Add the checkout button outside the loop
+            cartHTML += `
+                <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Buy now</button>
+            `;
             // Update the cart display
             purchases.innerHTML = cartHTML;
         }
-    
-        // Function to display the purchased items
-        function displayPurchasedItems() {
-            fetch('display-purchases.php')
-                .then(response => response.text())
-                .then(purchasedItemsHTML => {
-                    const purchasedItemsContainer = document.getElementById('purchasedItems');
-                    purchasedItemsContainer.innerHTML = purchasedItemsHTML;
-                })
-                .catch(error => console.error('Error displaying purchased items:', error));
-        }
-    
-        // Call the function to display purchased items
-        displayPurchasedItems();
-    
+
         // Function to handle checkout
         function checkout() {
             // Send a POST request to the server with the cart data
@@ -234,19 +220,22 @@
                     // Clear the cart if the data is successfully stored
                     cart = {};
                     displayCart(); // Update the cart display
-  
-                    // Display the confirmation modal
-                    $('#confirmationModal').modal('show');
-  
+
+                    // Display a confirmation message
+                    alert('Your purchase was successful!');
+
+                    // Optionally, display a modal instead of an alert
+                    // $('#confirmationModal').modal('show');
+
                     // Optionally, send an order confirmation email or handle payment here
-  
+
                 } else {
                     console.error("Error during checkout:", data.message);
                 }
             })
             .catch(error => console.error('Error:', error));
         }
-  
+
         // Function to redirect to the order summary page
         function redirectToOrderSummary() {
             window.location.href = 'order-summary.php'; // Replace with the actual URL of your order summary page

@@ -60,7 +60,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             <div class="col-md-12">
                 <div class="mt-5 mb-3 clearfix">
                     <h2 class="pull-left">Product Details</h2>
-                    <a href="./inventory/create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add New Product</a>
+                    <a href="./inventory/create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i>Add New Product</a>
                 </div>
                 <?php
                 // Include config file
@@ -117,9 +117,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                                 <td>{{img}}</td>
                                 <td>{{date_added}}</td>
                                 <td>
-                                    <a href="./inventory/read.php?id={{id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
-                                    <a href="./inventory/update.php?id={{id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
-                                    <a href="./inventory/delete.php?id={{id}}" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
+                                    <a href="../public/inventory/read.php?id={{id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
+                                    <a href="../public/inventory/update.php?id={{id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
+                                    <a href="../public/inventory/delete.php?id={{id}}" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
                                 </td>
                             </tr>
                         ';
