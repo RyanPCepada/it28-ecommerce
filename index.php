@@ -11,9 +11,9 @@
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid with minimum item width of 250px */
-            gap: 20px; /* Gap between grid items */
+            gap: 10px; /* Gap between grid items */
             padding: 20px; /* Add padding around the grid container */
-            width: 80%; /* Set width to 80% */
+            width: 100%; /* Set width to 100% */
         }
 
         /* Style for individual cards */
@@ -35,28 +35,6 @@
             object-fit: cover; /* Ensure the image covers the entire container */
         }
 
-        /* Style for the cart */
-        #purchases {
-            position: relative;
-            width: 20%;
-            position: fixed;
-            top: 4em;
-            right: 0px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 999;
-            overflow-y: auto; /* Enable vertical scrollbar */
-            max-height: calc(100vh - 70px); /* Limit max height to viewport height minus header and footer */
-        }
-
-        /* CSS for the product images in the Cart section */
-        .product-image {
-            width: 1in; /* Set width to 1 inch */
-            height: 1in; /* Set height to 1 inch */
-        }
-
         /* Full width for purchased items section */
         #purchased {
             width: 100%; /* Full width */
@@ -73,53 +51,76 @@
             /*max-height: 400px;  Limit max height */
         }
 
+        /* Style for the "Buy now" button */
+        .btn-buy-now {
+            margin-top: 10px;
+            margin-top: auto;
+        }
     </style>
 </head>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">
-        <img src="https://www.pngall.com/wp-content/uploads/2017/05/Copyright-Symbol-R-Free-Download-PNG.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        RyanNikeez
-    </a>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-            <a class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item active">
-            <a class="nav-link" href="display-purchases.php">Purchases<span class="sr-only"></span></a>
-        </li>
-      </ul>
 
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-success">
+    <a class="navbar-brand text-light" href="#">
+        <img src="https://cdn0.iconfinder.com/data/icons/most-usable-logos/120/Amazon-512.png"
+            height="40" class="d-inline-block align-top" alt="">
+        <strong>ArsyArts</strong>
+    </a>
+    <!-- Cart button for mobile mode -->
+    <button class="btn text-light d-lg-none" data-toggle="modal" data-target="#cartModal">
+        <i class="fas fa-shopping-cart" style="font-size: 30px;"></i>
+        <span id="cartCount" class="badge badge-pill badge-warning">0</span> <!-- Cart count badge -->
+    </button>
+    <!-- Hamburger menu for mobile mode -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mx-auto">
+            <li class="nav-item active">
+                <a class="nav-link text-light" href="index.php">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link text-light" href="purchases.php">Purchases</a>
+            </li>
+            <!-- Cart button for windows mode -->
+            <li class="nav-item d-none d-lg-block">
+                <button class="btn text-light" data-toggle="modal" data-target="#cartModal">
+                    <i class="fas fa-shopping-cart" style="font-size: 30px;"></i>
+                    <span id="cartCount" class="badge badge-pill badge-warning">0</span> <!-- Cart count badge -->
+                </button>
+            </li>
+        </ul>
+        <!-- Search form for windows mode -->
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
     </div>
 </nav>
+
+
+
 <body>
 
     <div id="productsDisplay" class="card-grid"></div>
-    <!-- Cart Display Area -->
-    <div id="purchases">
-        <h1>Cart</h1>
-    </div>
 
-    <!-- Confirmation Modal -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <!-- Cart Modal -->
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="confirmationModalLabel">Order Confirmation</h5>
+                    <h5 class="modal-title" id="cartModalLabel">Cart</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
-                    Your order has been placed successfully! Thank you for your purchase.
+                <div class="modal-body" id="cartContents">
+                    <!-- Cart items will be displayed here -->
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="redirectToOrderSummary()">View Order Summary</button>
+                    <button type="button" class="btn btn-primary" onclick="checkout()">Buy now</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -147,6 +148,9 @@
                                 <button class="btn btn-success" onclick="addToCart(${product.id},'${product.description}','${product.img}')">
                                     <i class="fas fa-cart-plus"></i> Add to Cart
                                 </button>
+                                <span class="btn-buy-now">
+                                    <button class="btn btn-primary" onclick="checkout()">Buy now</button>
+                                </span>
                             </div>
                         </div>
                     `;
@@ -154,10 +158,18 @@
                 });
             })
             .catch(error => console.error('Error:', error));
-    
+
         // Initialize cart object
         let cart = {};
-    
+
+
+        // Function to update the cart count
+        function updateCartCount() {
+            const cartCount = document.getElementById('cartCount');
+            const count = Object.keys(cart).length; // Count the number of items in the cart
+            cartCount.textContent = count; // Update the cart count
+        }
+
         // Function to add a product to the cart
         function addToCart(productId, description, img) {
             // Get the product details from the DOM
@@ -174,14 +186,17 @@
                 cart[productId] = { title, price, quantity, description, img };
             }
     
+            // Update the cart count
+            updateCartCount();
+
             // Display the updated cart
             displayCart();
         }
     
         // Function to display the cart with the items added and deduct the values from the quantity data field
         function displayCart() {
-            const purchases = document.getElementById('purchases');
-            let cartHTML = '<h1>Cart</h1>';
+            const cartContents = document.getElementById('cartContents');
+            let cartHTML = '';
             // Iterate over the cart items and display them
             for (const [productId, productDetails] of Object.entries(cart)) {
                 cartHTML += `
@@ -196,12 +211,8 @@
                     </div>
                 `;
             }
-            // Add the checkout button outside the loop
-            cartHTML += `
-                <button class="btn btn-primary btn-lg btn-block" onclick="checkout()">Buy now</button>
-            `;
             // Update the cart display
-            purchases.innerHTML = cartHTML;
+            cartContents.innerHTML = cartHTML;
         }
 
         // Function to handle checkout
@@ -219,6 +230,7 @@
                 if (data.status === "success") {
                     // Clear the cart if the data is successfully stored
                     cart = {};
+                    updateCartCount(); // Update the cart count
                     displayCart(); // Update the cart display
 
                     // Display a confirmation message
@@ -243,3 +255,4 @@
     </script>
 </body>
 </html>
+

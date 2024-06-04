@@ -30,9 +30,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-  </button>
-  <img src="https://www.pngall.com/wp-content/uploads/2017/05/Copyright-Symbol-R-Free-Download-PNG.png" width="30" height="30" class="d-inline-block align-top" alt="">
-
+    </button><img src="https://cdn0.iconfinder.com/data/icons/most-usable-logos/120/Amazon-512.png"
+        height="40" class="d-inline-block align-top" alt="">
   <a class="navbar-brand" href="dashboard.php"> Admin</a>
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
