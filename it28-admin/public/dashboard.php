@@ -1,30 +1,28 @@
-<?php
+<!-- <php
 // Initialize the session
 session_start();
  
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
-    header("location: ../index.php");
+    header("location: ../dashboard.php");
     exit;
 }
-?>
+?> -->
  
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Welcome</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArsyArts - Dashboard</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
-        body{ font: 14px sans-serif; }
-        .wrapper{
-            width: 600px;
-            margin: 0 auto;
-        }
+        body{ font: 14px sans-serif; text-align: center; }
+     
         table tr td:last-child{
             width: 120px;
         }
@@ -33,7 +31,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
-    </button><img src="https://cdn0.iconfinder.com/data/icons/most-usable-logos/120/Amazon-512.png"
+    </button><img src="icons/ARSYARTS_LOGO.png"
         height="40" class="d-inline-block align-top" alt="">
   <a class="navbar-brand"  href="dashboard.php">Admin</a>
 
@@ -43,7 +41,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <a class="nav-link" href="dashboard.php">Dashboard <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="products.php">Products</a>
+        <a class="nav-link" href="portraits.php">Portraits</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="customers.php">Customers</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -58,7 +59,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
 
 <div class="container-fluid" >
     <div class="card text-white bg-info mb-3" style="max-width: 18rem;">
-        <div class="card-header" href="products.php">Products Recorded</div>
+        <div class="card-header" href="portraits.php">Portraits Recorded</div>
         <div class="card-body">
             <h5 class="card-title "></h5>
             
@@ -67,18 +68,18 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             require_once "../db/config.php";
             
             // Attempt select query execution
-            $sql = "SELECT COUNT(*) AS total_products FROM products";
+            $sql = "SELECT COUNT(*) AS total_portraits FROM semi_hyperrealistic";
             if($stmt = $pdo->prepare($sql)){
                 // Attempt to execute the prepared statement
                 if($stmt->execute()){
                     // Bind result variables
-                    $stmt->bindColumn('total_products', $total_products);
+                    $stmt->bindColumn('total_portraits', $total_portraits);
                     
                     // Fetch result
                     if($stmt->fetch()){
-                        echo '<h1 class="text-center">' . $total_products . '</h1><br>';
+                        echo '<h1 class="text-center">' . $total_portraits . '</h1><br>';
                     } else{
-                        echo '<p>No products found.</p>';
+                        echo '<p>No portraits found.</p>';
                     }
                 } else{
                     echo "Oops! Something went wrong. Please try again later.";

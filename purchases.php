@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Purchased Items</title>
+    <title>ArsyArts - Purchases</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
     <style>
@@ -56,7 +56,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-success">
     <a class="navbar-brand text-light" href="#">
-        <img src="https://cdn0.iconfinder.com/data/icons/most-usable-logos/120/Amazon-512.png"
+        <img src="icons/ARSYARTS_LOGO.png"
             height="40" class="d-inline-block align-top" alt="">
         <strong>ArsyArts</strong>
     </a>
@@ -73,7 +73,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mx-auto">
             <li class="nav-item active">
-                <a class="nav-link text-light" href="index.php">Home<span class="sr-only">(current)</span></a>
+                <a class="nav-link text-light" href="home.php">Home<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link text-light" href="purchases.php">Purchases</a>
@@ -91,6 +91,9 @@
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
         </form>
+        <li class="nav-item active">
+            <a class="nav-link text-light" href="logout.php">Log out</a>
+        </li>
     </div>
 </nav>
 

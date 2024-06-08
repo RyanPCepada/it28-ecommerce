@@ -1,130 +1,116 @@
 <?php
-// Initialize the session
 session_start();
- 
-// Check if the user is already logged in, if yes then redirect him to welcome page
-if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-    header("location: ./public/dashboard.php");
-    exit;
-}
- 
-// Include config file
-require_once $_SERVER['DOCUMENT_ROOT'] . "/it28-ecommerce/it28-admin/db/config.php";
- 
-// Define variables and initialize with empty values
-$username = $password = "";
-$username_err = $password_err = $login_err = "";
- 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
- 
-    // Check if username is empty
-    if(empty(trim($_POST["username"]))){
-        $username_err = "Please enter username.";
-    } else{
-        $username = trim($_POST["username"]);
-    }
-    
-    // Check if password is empty
-    if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter your password.";
-    } else{
-        $password = trim($_POST["password"]);
-    }
-    
-    // Validate credentials
-    if(empty($username_err) && empty($password_err)){
-        // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = :username";
-        
-        if($stmt = $pdo->prepare($sql)){
-            // Bind variables to the prepared statement as parameters
-            $stmt->bindParam(":username", $param_username, PDO::PARAM_STR);
-            
-            // Set parameters
-            $param_username = trim($_POST["username"]);
-            
-            // Attempt to execute the prepared statement
-            if($stmt->execute()){
-                // Check if username exists, if yes then verify password
-                if($stmt->rowCount() == 1){
-                    if($row = $stmt->fetch()){
-                        $id = $row["id"];
-                        $username = $row["username"];
-                        $hashed_password = $row["password"];
-                        if(password_verify($password, $hashed_password)){
-                            // Password is correct, so start a new session
-                            session_start();
-                            
-                            // Store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;                            
-                            
-                            // Redirect user to dashboars page
-                            header("location: ./public/dashboard.php");
-                        } else{
-                            // Password is not valid, display a generic error message
-                            $login_err = "Invalid username or password.";
-                        }
-                    }
-                } else{
-                    // Username doesn't exist, display a generic error message
-                    $login_err = "Invalid username or password.";
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
+include 'db/config.php'; // Make sure to include your database connection file
 
-            // Close statement
-            unset($stmt);
-        }
+$email_or_username = '';
+$password = '';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $email_or_username = trim($_POST['email_or_username']);
+    $password = trim($_POST['password']);
+    
+    // Function to check admin login with plain text password
+    function checkAdmin($pdo, $email_or_username, $password) {
+        $query = "SELECT * FROM admin WHERE (email = :email_or_username OR username = :email_or_username) AND password = :password";
+        $stmt = $pdo->prepare($query);
+        $stmt->execute(['email_or_username' => $email_or_username, 'password' => $password]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
-    // Close connection
-    unset($pdo);
+    
+    $admin_result = checkAdmin($pdo, $email_or_username, $password);
+    if ($admin_result) {
+        $_SESSION['admin_id'] = $admin_result['admin_id'];
+        header("Location: public/dashboard.php");
+        exit();
+    }
+    
+    // If no match, show an error
+    $error = "Invalid email/username or password.";
 }
 ?>
- 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArsyArts - Login</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        body{ font: 14px sans-serif; }
-        .wrapper{ width: 360px; padding: 20px; }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            padding: 20px;
+            background-color: #f8f9fa;
+            margin: 0;
+        }
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .login-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        .form-control {
+            font-size: 16px;
+            padding: 10px;
+        }
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #28a745;
+        }
+        .btn-login {
+            background-color: #28a745;
+            border-color: #28a745;
+            padding: 10px;
+            font-size: 18px;
+        }
+        .btn-login:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        .register-link {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+        .register-link a {
+            color: #28a745;
+        }
     </style>
 </head>
 <body>
-<div class="wrapper" style="margin: 0 auto; text-align: center;">
-    <h2>Login</h2>
-    <p>Please fill in your credentials to login.</p>
-
-    <?php 
-    if(!empty($login_err)){
-        echo '<div class="alert alert-danger">' . $login_err . '</div>';
-    }        
-    ?>
-
-    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" style="text-align: left;">
-        <div class="form-group">
-            <label>Username</label>
-            <input type="text" name="username" class="form-control <?php echo (!empty($username_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $username; ?>">
-            <span class="invalid-feedback"><?php echo $username_err; ?></span>
-        </div>    
-        <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" class="form-control <?php echo (!empty($password_err)) ? 'is-invalid' : ''; ?>">
-            <span class="invalid-feedback"><?php echo $password_err; ?></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Login">
-        </div>
-        <p>Don't have an account? <a href="./public/user/register.php">Sign up now</a>.</p>
-    </form>
-</div>
-
+    <div class="login-container">
+        <h2 class="text-center">Login</h2>
+        <?php if (isset($error)) { ?>
+            <div class="alert alert-danger" role="alert">
+                <?= $error ?>
+            </div>
+        <?php } ?>
+        <form action="" method="POST">
+            <div class="form-group">
+                <label for="email_or_username">Username or Email</label>
+                <input type="text" class="form-control" id="email_or_username" name="email_or_username" value="<?= htmlspecialchars($email_or_username) ?>" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" value="<?= htmlspecialchars($password) ?>" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block btn-login">Login</button>
+            <div class="text-center register-link">
+                <p>Don't have an account? <a href="./public/user/register.php">Register</a></p>
+            </div>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
