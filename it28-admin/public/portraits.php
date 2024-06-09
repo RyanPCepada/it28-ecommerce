@@ -249,6 +249,105 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         </div>
 
 
+
+
+
+
+        <!-- Add this code after the Realistic Portraits table -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mt-5 mb-3 clearfix">
+                        <h2 class="pull-left">Portrait Quality Details</h2>
+                        <a href="./inventory/det_create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i>Add New Quality</a>
+                    </div>
+                    <?php
+                    // Include config file
+                    require_once "../db/config.php";
+                    
+                    // Attempt select query execution
+                    $sql = "SELECT * FROM details";
+                    if($result = $pdo->query($sql)){
+                        $totalRows = $result->rowCount();
+
+                        if($result->rowCount() > 0){
+                            // Define the table template
+                            $tableTemplate = '
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th> <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                                            </th>
+                                            <th class="text-center" colspan="8"><h6>Showing ' . $totalRows . ' / ' . $totalRows . ' Records</h6></th>
+
+                                            </tr>
+                                        </thead>                               
+                                    </table>
+                                
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Quality</th>
+                                                <th>Description</th>
+                                                <th>Starting Price</th>
+                                                <th>Duration</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{rows}}
+                                        </tbody>
+                                    </table>
+                    
+                            ';
+                    
+                            // Define the row template
+                            $rowTemplate = '
+                                <tr>
+                                    <td>{{details_id}}</td>
+                                    <td>{{quality}}</td>
+                                    <td>{{description}}</td>
+                                    <td>{{starting_price}}</td>
+                                    <td>{{duration}}</td>
+                                    <td>
+                                        <a href="../public/inventory/det_read.php?details_id={{details_id}}" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>
+                                        <a href="../public/inventory/det_update.php?details_id={{details_id}}" class="mr-3" title="Update Record" data-toggle="tooltip"><span class="fa fa-pencil"></span></a>
+                                        <a href="../public/inventory/det_delete.php?details_id={{details_id}}" title="Delete Record" data-toggle="tooltip"><span class="fa fa-trash"></span></a>
+                                    </td>
+                                </tr>
+                            ';
+                    
+                            // Populate the rows using the row template
+                            $rows = '';
+                            while ($row = $result->fetch()) {
+                                $rowHtml = str_replace(
+                                    array('{{details_id}}', '{{quality}}', '{{description}}', '{{starting_price}}', '{{duration}}'),
+                                    array($row['details_id'], $row['quality'], $row['description'], $row['starting_price'], $row['duration']),
+                                    $rowTemplate
+                                );
+                                $rows .= $rowHtml;
+                            }
+                    
+                            // Replace the rows placeholder in the table template with the actual rows
+                            echo str_replace('{{rows}}', $rows, $tableTemplate);
+                            
+                            // Free result set
+                            unset($result);
+                        } else{
+                            echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
+                        }
+                    } else{
+                        echo "Oops! Something went wrong. Please try again later.";
+                    }
+                    
+                    ?>
+                </div>
+            </div>        
+        </div>
+
+
+
+
     </div>
 
 </body>

@@ -7,6 +7,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
     <style>
+        body {
+            background-color: #18191A; /* Dark background similar to Facebook */
+            color: #E4E6EB; /* Light text color for contrast */
+        }
+        
+        /* Add custom styles for dark toggle button */
+        .navbar-toggler {
+            border-color: #666 !important;
+            /* Dark border */
+            background-color: #333 !important;
+            /* Dark background */
+        }
+        
+        /* Add custom styles for the toggle button icon */
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+            /* Light toggle button icon */
+        }
+        
         /* Define a class for the grid */
         .card-grid {
             display: grid;
@@ -33,6 +52,12 @@
             height: auto; /* Maintain aspect ratio */
             object-fit: cover; /* Ensure the image covers the entire container */
         }
+        .divider1 {
+            height: 7px;
+            background-color: black; /* Dark gray */
+            margin-top: 0px; /* Adjust margin as needed */
+            margin-bottom: 0px; /* Adjust margin as needed */
+        }
 
         /* Full width for purchased items section */
         #purchased {
@@ -47,6 +72,9 @@
             z-index: 999;
             margin-top: 20px; /* Adjust as needed */
             overflow-y: auto; /* Enable vertical scrollbar */
+            
+            background-color: #18191A; /* Dark background similar to Facebook */
+            color: #E4E6EB; /* Light text color for contrast */
         }
     </style>
 </head>
@@ -54,7 +82,7 @@
 
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-success">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <a class="navbar-brand text-light" href="#">
         <img src="icons/ARSYARTS_LOGO.png"
             height="40" class="d-inline-block align-top" alt="">
@@ -97,6 +125,7 @@
     </div>
 </nav>
 
+<div class="divider1"></div>
 
 
     <!-- Purchased Items Section -->

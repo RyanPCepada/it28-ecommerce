@@ -5,73 +5,228 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArsyArts - Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Define a class for the grid */
+        body {
+            background-color: #18191A; /* Dark background similar to Facebook */
+            color: #E4E6EB; /* Light text color for contrast */
+        }
+        .navbar-toggler {
+            border-color: #666 !important; /* Dark border */
+            background-color: #333 !important; /* Dark background */
+            color: #fff !important; /* Light text color */
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3e%3cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important; /* Light toggle button icon */
+        }
+
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive grid with minimum item width of 250px */
-            gap: 10px; /* Gap between grid items */
-            padding: 20px; /* Add padding around the grid container */
-            width: 100%; /* Set width to 100% */
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 10px;
+            padding: 20px;
+            width: 100%;
         }
-
-        /* Style for individual cards */
-        .card {
-            width: 100% !important; /* Ensure cards take full width of their container */
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth transitions */
-            background-color: #d5ffd7;
+        .card-img-only {
+            width: 100% !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: lightgray;
         }
-
-        .card:hover {
-            background-color: rgb(185, 243, 186);
-            transform: translateY(-10px); /* Move the card up when hovered */
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+        .card-img-only:hover {
+            background-color: lightgray;
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
         }
-
-        .card-img-top {
-            width: 100%; /* Ensure the image fills its container */
-            height: auto; /* Maintain aspect ratio */
-            object-fit: cover; /* Ensure the image covers the entire container */
-        }
-
-        /* Full width for purchased items section */
-        #purchased {
-            width: 100%; /* Full width */
-            position: relative; /* Not fixed */
-            top: 0; /* Reset top */
-            right: 0; /* Reset right */
-            background-color: #fff;
-            border: 1px solid #ddd;
-            padding: 10px;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-            z-index: 999;
-            margin-top: 20px; /* Adjust as needed */
-            overflow-y: auto; /* Enable vertical scrollbar */
-            /*max-height: 400px;  Limit max height */
-        }
-
-        /* Style for the "Buy now" button */
-        .btn-buy-now {
+        .carousel-item {
+            position: relative;
+            height: 536px; /* Set a fixed height for the carousel */
             margin-top: 10px;
-            margin-top: auto;
+            background-color: lightgray; /* Black background for the carousel */
+        }
+        .carousel-item img {
+            max-height: 100%;
+            max-width: 93%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .carousel-caption {
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            width: 80%;
+            text-align: center;
+            font-family: 'Lucida Calligraphy', cursive; /* Use Lucida Calligraphy font for the description */
+        }
+
+        @media (max-width: 768px) {
+            .card-grid {
+                display: none;
+            }
+            .carousel {
+                display: block;
+            }
+        }
+        @media (min-width: 769px) {
+            .carousel {
+                display: none;
+            }
+        }
+        .divider1 {
+            height: 7px;
+            background-color: black; /* Dark gray */
+            margin-top: 0px; /* Adjust margin as needed */
+            margin-bottom: 0px; /* Adjust margin as needed */
+        }
+        .divider2 {
+            height: 7px;
+            background-color: black; /* Dark gray */
+            margin-top: 20px; /* Adjust margin as needed */
+            margin-bottom: 20px; /* Adjust margin as needed */
+        }
+
+        .divider3 {
+            height: 7px;
+            background-color: black; /* Dark gray */
+            margin-top: 20px; /* Adjust margin as needed */
+            margin-bottom: 0px; /* Adjust margin as needed */
+        }
+
+        .details-section {
+            display: none;
+            padding: 10px;
+            /* background-color: #1C1D1E; */
+            background-color: #1E1F20;
+            /* background-color: #212223; */
+            color: lightgray;
+            margin: 10px;
+            margin-top: 2px;
+            margin-bottom: 0px;
+            border: solid 1px #444;
+            border-radius: 10px;
+        }
+        .modal-dark .modal-content {
+            background-color: #1E1F20; /* Dark background color */
+            color: #E4E6EB; /* Light text color for contrast */
+            width: 100%;
+        }
+
+        .modal-dark .modal-content input[type="file"],
+        .modal-dark .modal-content input[type="text"], /* Add this line to include text input fields */
+        .modal-dark .modal-content select,
+        .modal-dark .modal-content .form-check-input {
+            background-color: #2C2D2E; /* Darker background color for input fields */
+            color: #E4E6EB; /* Light text color for input fields */
+            border-color: #55595e; /* Border color for input fields */
+        }
+
+
+        .modal-dark .modal-content input[type="file"]::-webkit-file-upload-button {
+            background-color: #2C2D2E; /* Darker background color for file upload button */
+            color: #E4E6EB; /* Light text color for file upload button */
+            border: 1px solid #55595e; /* Border for file upload button */
+        }
+
+        .modal-dark .modal-content .btn-primary,
+        .modal-dark .modal-content .btn-secondary {
+            background-color: #007bff; /* Primary and secondary button background color */
+            border-color: #007bff; /* Primary and secondary button border color */
+            color: #E4E6EB; /* Light text color for buttons */
+        }
+
+        .modal-dark .modal-content .btn-primary:hover,
+        .modal-dark .modal-content .btn-secondary:hover {
+            background-color: #0056b3; /* Darker background color on hover for buttons */
+            border-color: #0056b3; /* Darker border color on hover for buttons */
+            color: #E4E6EB; /* Light text color for buttons */
+        }
+        .modal-dark .modal-content input[type="date"] {
+            background-color: #2C2D2E; /* Darker background color for date picker */
+            color: #E4E6EB; /* Light text color for date picker */
+            border-color: #55595e; /* Border color for date picker */
+        }
+        .quantity-box {
+            display: flex;
+            align-items: center;
+            background-color: #2C2D2E; /* Darker background color */
+            border: 1px solid #55595e; /* Border color */
+            border-radius: 5px;
+            padding: 0 10px; /* Add padding to give space around the input */
+        }
+
+        .quantity-controls {
+            cursor: pointer;
+            color: #E4E6EB; /* Light text color */
+            padding: 5px;
+        }
+
+        .quantity-input {
+            flex: 1; /* Allow the input to expand to fill remaining space */
+            background: none; /* Remove background */
+            border: none; /* Remove border */
+            color: #E4E6EB; /* Light text color */
+            font-size: 16px; /* Adjust font size */
+            text-align: center; /* Center text */
+            outline: none; /* Remove focus outline */
+        }
+
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .modal-header,
+        .dark-mode .modal-footer {
+            border-color: #444;
+        }
+
+        .dark-mode .modal-title,
+        .dark-mode .modal-body,
+        .dark-mode .modal-footer button {
+            color: #fff;
+        }
+
+        .dark-mode .close {
+            color: #fff;
+        }
+
+        .dark-mode .close:hover,
+        .dark-mode .close:focus {
+            color: #fff;
+        }
+
+        /* Override Bootstrap modal-dialog class to center modal vertically */
+        .modal-dialog {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100% - 1rem);
+        }
+
+        @media (min-width: 576px) {
+            .modal-dialog {
+                max-width: 500px; /* Adjust this value based on your preference */
+            }
         }
     </style>
 </head>
 
-
-<nav class="navbar navbar-expand-lg navbar-light bg-success">
+<nav class="navbar navbar-expand-lg navbar-light bg-dark">
     <a class="navbar-brand text-light" href="#">
-        <img src="icons/ARSYARTS_LOGO.png"
-            height="40" class="d-inline-block align-top" alt="">
+        <img src="icons/ARSYARTS_LOGO.png" height="40" class="d-inline-block align-top" alt="">
         <strong>ArsyArts</strong>
     </a>
-    <!-- Cart button for mobile mode -->
     <button class="btn text-light d-lg-none" data-toggle="modal" data-target="#cartModal">
         <i class="fas fa-shopping-cart" style="font-size: 30px;"></i>
-        <span id="cartCountMobile" class="badge badge-pill badge-warning">0</span> <!-- Cart count badge for mobile -->
+        <span id="cartCountMobile" class="badge badge-pill badge-warning">0</span>
     </button>
-    <!-- Hamburger menu for mobile mode -->
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -84,15 +239,13 @@
             <li class="nav-item active">
                 <a class="nav-link text-light" href="purchases.php">Purchases</a>
             </li>
-            <!-- Cart button for windows mode -->
             <li class="nav-item d-none d-lg-block">
                 <button class="btn text-light" data-toggle="modal" data-target="#cartModal">
                     <i class="fas fa-shopping-cart" style="font-size: 30px;"></i>
-                    <span id="cartCountDesktop" class="badge badge-pill badge-warning">0</span> <!-- Cart count badge for desktop -->
+                    <span id="cartCountDesktop" class="badge badge-pill badge-warning">0</span>
                 </button>
             </li>
         </ul>
-        <!-- Search form for windows mode -->
         <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
@@ -103,20 +256,62 @@
     </div>
 </nav>
 
-
+<div class="divider1"></div>
 
 <body>
-
-    <h4 class="section-label text-dark" style="display: inline-block; background-color: lightgray; border: solid 0px gray; border-radius: 5px; padding: 10px; margin-top: 20px; margin-left: 20px; margin-bottom: 0px;">
-        Semi-Hyperrealistic <i class="fas fa-paint-brush"></i>
-    </h4>
+    <div class="row col-md-12" style="margin-top: 10px;">
+        <div class="col-12">
+            <h4 class="section-label text-light">
+                Semi-Hyperrealistic <i class="fas fa-paint-brush"></i>
+            </h4>
+            <button class="btn btn-primary btn-order" onclick="fetchDetails('Semi-Hyperrealistic')"
+                data-toggle="modal" data-target="#viewDetailsModal">View Details</button>
+            <button class="btn btn-success btn-order" onclick="toPlaceOrder('Semi-Hyperrealistic')">Order Now</button>
+        </div>
+    </div>
+    
+    <div class="text-muted" id="semiHyperrealisticPortraitsDescription" style="margin-left: 10px;"></div>
+    <div id="semiHyperrealisticPortraitsCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner"></div>
+        <a class="carousel-control-prev" href="#semiHyperrealisticPortraitsCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#semiHyperrealisticPortraitsCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
     <div id="semiHyperrealisticPortraits" class="card-grid"></div>
-    <h4 class="section-label text-secondary" style="display: inline-block; background-color: lightgray; border: solid 0px gray; border-radius: 5px; padding: 10px; margin-top: 20px; margin-left: 20px; margin-bottom: 0px;">
-        Realistic <i class="fas fa-paint-brush"></i>
-    </h4>
+
+
+    <div class="divider2"></div>
+
+    <div class="row col-md-12" style="margin-top: 10px;">
+        <div class="col-12">
+            <h4 class="section-label text-light">
+                Realistic <i class="fas fa-paint-brush"></i>
+            </h4>
+            <button class="btn btn-primary btn-order" onclick="fetchDetails('Realistic')"
+                data-toggle="modal" data-target="#viewDetailsModal">View Details</button>
+            <button class="btn btn-success btn-order" onclick="toPlaceOrder('Realistic')">Order Now</button>
+        </div>
+    </div>
+    
+    <div class="text-muted" id="realisticPortraitsDescription" style="margin-left: 10px;"></div>
+    <div id="realisticPortraitsCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner"></div>
+        <a class="carousel-control-prev" href="#realisticPortraitsCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#realisticPortraitsCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
     <div id="realisticPortraits" class="card-grid"></div>
 
-    <!-- Cart Modal -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -126,115 +321,129 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body" id="cartContents">
-                    <!-- Cart items will be displayed here -->
-                </div>
+                <div class="modal-body" id="cartContents"></div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="checkout()">Buy now</button>
+                    <button type="button" class="btn btn-primary" onclick="checkout()">Buy Now</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add these scripts at the end of the body tag for better performance -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!--VIEW DETAILS MODAL -->
+    <div class="modal fade" id="viewDetailsModal" tabindex="-1" aria-labelledby="viewDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content dark-mode">
+                <div class="modal-header">
+                    <?php
+                        $type = isset($_GET['type']) ? $_GET['type'] : '';
+                    ?>
+                    <h5 class="modal-title text-light" id="viewDetailsModalLabel"><?php echo $type; ?> Details</h5>
+                    <button type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="viewDetailsContents">
+                    
+                    <h1>Wapa juy detalye pasensyahe sa jud.</h1>
+                    
+                    <!-- Add View Pricelist link -->
+                    <a href="pricelist.php" class="text-primary" style="text-decoration: underline;">View Pricelist</a>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" onclick="toPlaceOrderFromModal()">Order Now</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END VIEW DETAILS MODAL -->
+
+    <div class="divider3"></div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  
+
     <script>
-        // Fetch data from the semi_hyperrealistic table
         fetch('./portraits/shr-portraits-api.php')
             .then(response => response.json())
             .then(data => {
                 const semiHyperrealisticPortraitsContainer = document.getElementById('semiHyperrealisticPortraits');
-                data.forEach(portrait => {
+                const semiHyperrealisticPortraitsCarouselInner = document.querySelector('#semiHyperrealisticPortraitsCarousel .carousel-inner');
+                data.forEach((portrait, index) => {
                     const cardHTML = `
-                        <div class="card m-2" style="width: 20rem;">
+                        <div class="card-img-only m-2">
                             <img class="card-img-top" src="${portrait.img}">
-                            <div class="card-body">
-                                <h5 class="card-title">${portrait.title}</h5>
-                                <p class="card-text">${portrait.description}</p>
-                                <p class="card-text">Price: ₱${portrait.price}</p>
-                                <button class="btn btn-success" onclick="addToCart(${portrait.id},'${portrait.description}','${portrait.img}')">
-                                    <i class="fas fa-cart-plus"></i> Add to Cart
-                                </button>
-                                <span class="btn-buy-now">
-                                    <button class="btn btn-primary" onclick="checkout()">Buy now</button>
-                                </span>
-                            </div>
                         </div>
                     `;
                     semiHyperrealisticPortraitsContainer.innerHTML += cardHTML;
+
+                    const carouselItemHTML = `
+                        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                            <img src="${portrait.img}" class="d-block w-100" alt="${portrait.title}">
+                            <div class="carousel-caption">${portrait.description}</div>
+                        </div>
+                    `;
+                    semiHyperrealisticPortraitsCarouselInner.innerHTML += carouselItemHTML;
                 });
             })
             .catch(error => console.error('Error:', error));
 
-        // Fetch data from the realistic table
         fetch('./portraits/r-portraits-api.php')
             .then(response => response.json())
             .then(data => {
                 const realisticPortraitsContainer = document.getElementById('realisticPortraits');
-                data.forEach(portrait => {
+                const realisticPortraitsCarouselInner = document.querySelector('#realisticPortraitsCarousel .carousel-inner');
+                data.forEach((portrait, index) => {
                     const cardHTML = `
-                        <div class="card m-2" style="width: 20rem;">
+                        <div class="card-img-only m-2">
                             <img class="card-img-top" src="${portrait.img}">
-                            <div class="card-body">
-                                <h5 class="card-title">${portrait.title}</h5>
-                                <p class="card-text">${portrait.description}</p>
-                                <p class="card-text">Price: ₱${portrait.price}</p>
-                                <button class="btn btn-success" onclick="addToCart(${portrait.id},'${portrait.description}','${portrait.img}')">
-                                    <i class="fas fa-cart-plus"></i> Add to Cart
-                                </button>
-                                <span class="btn-buy-now">
-                                    <button class="btn btn-primary" onclick="checkout()">Buy now</button>
-                                </span>
-                            </div>
                         </div>
                     `;
                     realisticPortraitsContainer.innerHTML += cardHTML;
+
+                    const carouselItemHTML = `
+                        <div class="carousel-item ${index === 0 ? 'active' : ''}">
+                            <img src="${portrait.img}" class="d-block w-100" alt="${portrait.title}">
+                            <div class="carousel-caption">${portrait.description}</div>
+                        </div>
+                    `;
+                    realisticPortraitsCarouselInner.innerHTML += carouselItemHTML;
                 });
             })
             .catch(error => console.error('Error:', error));
-            
-        // Initialize cart object
+
         let cart = {};
 
-        // Function to update the cart count
         function updateCartCount() {
-            const cartCount = Object.keys(cart).length; // Count the number of items in the cart
-            document.getElementById('cartCountMobile').textContent = cartCount; // Update the cart count for mobile
-            document.getElementById('cartCountDesktop').textContent = cartCount; // Update the cart count for desktop
+            const cartCount = Object.keys(cart).length;
+            document.getElementById('cartCountMobile').textContent = cartCount;
+            document.getElementById('cartCountDesktop').textContent = cartCount;
         }
 
-        // Function to add a portrait to the cart
         function addToCart(portraitId, description, img) {
-            // Get the portrait details from the DOM
             const portraitCard = document.querySelector(`[onclick="addToCart(${portraitId},'${description}','${img}')"]`).closest('.card');
             const title = portraitCard.querySelector('.card-title').textContent;
             const priceText = portraitCard.querySelector('.card-body').innerHTML.match(/Price: ₱(\d+\.?\d*)/);
             const price = priceText ? parseFloat(priceText[1]) : 0;
-            const quantity = 1; // Default to 1 for simplicity
-    
-            // Add the portrait to the cart
+            const quantity = 1;
+
             if (cart[portraitId]) {
                 cart[portraitId].quantity++;
             } else {
                 cart[portraitId] = { title, price, quantity, description, img };
             }
-    
-            // Update the cart count
-            updateCartCount();
 
-            // Display the updated cart
+            updateCartCount();
             displayCart();
         }
-    
-        // Function to display the cart with the items added and deduct the values from the quantity data field
+
         function displayCart() {
             const cartContents = document.getElementById('cartContents');
             let cartHTML = '';
-            // Iterate over the cart items and display them
             for (const [portraitId, portraitDetails] of Object.entries(cart)) {
                 cartHTML += `
                     <div class="portrait mb-3">
@@ -248,13 +457,19 @@
                     </div>
                 `;
             }
-            // Update the cart display
             cartContents.innerHTML = cartHTML;
         }
 
-        // Function to handle checkout
+        function toggleDetails(type) {
+            const detailsSection = document.getElementById(`${type}Details`);
+            if (detailsSection.style.display === "none") {
+                detailsSection.style.display = "block";
+            } else {
+                detailsSection.style.display = "none";
+            }
+        }
+
         function checkout() {
-            // Send a POST request to the server with the cart data
             fetch('checkout.php', {
                 method: 'POST',
                 headers: {
@@ -265,19 +480,10 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === "success") {
-                    // Clear the cart if the data is successfully stored
                     cart = {};
-                    updateCartCount(); // Update the cart count
-                    displayCart(); // Update the cart display
-
-                    // Display a confirmation message
+                    updateCartCount();
+                    displayCart();
                     alert('Your purchase was successful!');
-
-                    // Optionally, display a modal instead of an alert
-                    // $('#confirmationModal').modal('show');
-
-                    // Optionally, send an order confirmation email or handle payment here
-
                 } else {
                     console.error("Error during checkout:", data.message);
                 }
@@ -285,10 +491,61 @@
             .catch(error => console.error('Error:', error));
         }
 
-        // Function to redirect to the order summary page
-        function redirectToOrderSummary() {
-            window.location.href = 'order-summary.php'; // Replace with the actual URL of your order summary page
+        function checkout() {
+            // Your existing checkout function content here
+            $('#orderModal').modal('show'); // Show the modal when "Order now" is clicked
         }
+
+        function submitOrder() {
+            // Handle the submission of the order form here
+        }
+
+        function toPlaceOrder(type) {
+            window.location.href = 'place_order.php?type=' + type;
+        }
+        
+
+        function fetchDetails(type) {
+            // Open the view details modal
+            $('#viewDetailsModal').modal('show');
+            
+            // Set the title of the modal
+            document.getElementById('viewDetailsModalLabel').textContent = type + ' Details';
+        }
+
+        // Define a global variable to store the current type
+        let currentType;
+
+        function fetchDetails(type) {
+            // Open the view details modal
+            $('#viewDetailsModal').modal('show');
+            
+            // Set the title of the modal
+            document.getElementById('viewDetailsModalLabel').textContent = type + ' Details';
+            
+            // Set the current type
+            currentType = type;
+        }
+
+        function toPlaceOrderFromModal() {
+            // Use the current type when "Order Now" button is clicked
+            toPlaceOrder(currentType);
+        }
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.querySelector('.quantity-input');
+            const incrementButton = document.querySelector('.increment');
+            const decrementButton = document.querySelector('.decrement');
+            
+            incrementButton.addEventListener('click', function() {
+            quantityInput.stepUp();
+            });
+            
+            decrementButton.addEventListener('click', function() {
+            quantityInput.stepDown();
+            });
+        });
     </script>
 </body>
 </html>
